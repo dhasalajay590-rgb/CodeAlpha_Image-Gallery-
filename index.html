@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Image Gallery</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filter-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filter-buttons button {
+    padding: 8px 15px;
+    margin: 5px;
+    border: none;
+    background: #333;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.filter-buttons button:hover {
+    background: #555;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.gallery img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+
+}
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 6px;
+}
+
+.close, .prev, .next {
+    position: absolute;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.close {
+    top: 20px;
+    right: 30px;
+}
+
+.prev {
+    left: 30px;
+}
+
+.next {
+    right: 30px;
+}
+
+@media (max-width: 600px) {
+    .gallery img {
+        height: 150px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h2>Responsive Image Gallery</h2>
+
+<div class="filter-buttons">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('city')">City</button>
+</div>
+
+<div class="gallery">
+    <img src="https://picsum.photos/id/1015/600/400" class="nature" onclick="openLightbox(0)">
+    <img src="https://picsum.photos/id/1016/600/400" class="nature" onclick="openLightbox(1)">
+    <img src="https://picsum.photos/id/1011/600/400" class="city" onclick="openLightbox(2)">
+    <img src="https://picsum.photos/id/1012/600/400" class="city" onclick="openLightbox(3)">
+    <img src="https://picsum.photos/id/1020/600/400" class="nature" onclick="openLightbox(4)">
+    <img src="https://picsum.photos/id/1024/600/400" class="city" onclick="openLightbox(5)">
+     </div>
+
+<div class="lightbox" id="lightbox">
+    <span class="close" onclick="closeLightbox()">✖</span>
+    <span class="prev" onclick="changeImage(-1)">❮</span>
+    <img id="lightboxImg">
+    <span class="next" onclick="changeImage(1)">❯</span>
+</div>
+
+<script>
+let currentIndex = 0;
+const images = document.querySelectorAll(".gallery img");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+
+function openLightbox(index) {
+    currentIndex = index;
+    lightbox.style.display = "flex";
+    lightboxImg.src = images[index].src;
+}
+
+function closeLightbox() {
+    lightbox.style.display = "none";
+}
+
+function changeImage(step) {
+    currentIndex += step;
+    if (currentIndex < 0) currentIndex = images.length - 1;
+    if (currentIndex >= images.length) currentIndex = 0;
+    lightboxImg.src = images[currentIndex].src;
+}
+
+function filterImages(category) {
+    images.forEach(img => {
+        if (category === "all" || img.classList.contains(category)) {
+            img.style.display = "block";
+        } else {
+            img.style.display = "none";
+        }
+    });
+}
+</script>
+
+</body>
+</html>
